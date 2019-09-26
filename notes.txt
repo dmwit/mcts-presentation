@@ -1,0 +1,42 @@
+https://web.archive.org/web/20180613163939/http://mcts.ai/pubs/mcts-survey-master.pdf
+https://int8.io/monte-carlo-tree-search-beginners-guide/
+
+Talk idea: Win any game with these 3 weird tricks. Number three will shock you
+* abstract
+	* at Galois, like to specify behavior carefully
+	* disdain for ML techniques: that's what we use when we don't know what behavior we want
+	* lot of hubbub lately about α_0, an ML triumph of a game-playing AI based on MCTS and neural nets
+	* this talk: convince you that MCTS is grounded, principled, obviously the right choice with solid theory supporting each engineering decision
+	* of course, to do that, I'll have to teach you what MCTS is and how it works/is used in α_0
+* outline
+	* intro: minimax
+		* maybe do a show of hands: who has heard the term minimax before? understood it well enough in some distant past that they did or could have implemented it? are intimately familiar with the details right now?
+			* better idea: tell them that traditionally we do a show of hands, but I couldn't think of a question which would actually change what I would present, but still wanted to keep the audience interaction
+			* 3/4 of you please put your hand up (mutter "okay, yes, I see")
+			* ask about half of them to keep their hands up
+			* ask for the people who think they might be in the 5-6 most expert in minimax at Galois to keep their hands up
+			* later, reveal that this was a trick to demonstrate MCTS: I got some information out of this even though the initial downselection was completely random
+		* mathematician's search, platonic ideal, ur-search, the search that makes other little baby searches wear underwear over their pants and dream of growing up big and strong like minimax
+		* simple, elegant, obviously correct... and utterly useless
+		* describe the algorithm
+		* leaf nodes: finished games, with a utility for each player
+		* internal nodes: labeled by the player whose turn it is; edges for each possible move; assigned the same outcomes as the child that maximizes the current player's utility
+		* ties: choose the minimum utility among all the ties, independently for each of the non-current player (motivates the name minimax: mini for other players, max for current player)
+		* outcome of the algorithm: labels a game tree with move choices and the utility that the current player can guarantee for themselves by making them (and they may do better than that if their opponents vary from the worst case)
+	* what if minimax didn't suck?
+		* have to look at an entire subtree to know the "value" of a given node. wat do?
+		* early solution: write an algorithm that guesses the utility without expanding the whole tree. expand from the root to some fixed depth, then switch to the approximation
+		* needs a new guesser for every game
+		* α_0 idea: many infeasibly-difficult integrals/sums can be approximated by sampling from the space of interest; as sample size grows, approximation accuracy improves
+		* so sample from the leaves of the given subtree
+	* how to ~~win~~ lose slowly in Vegas
+		* describe the multi-arm bandit problem and the solution
+		* α_0 idea: use the multi-arm bandit solution to choose which approximation to improve/sample more
+	* what if our priors didn't suck?
+		* currently when sampling, do uniform distribution on next move. ouch
+		* show a couple game positions (say, from go, or chess) where there's a few moves that humans would instantly focus on and *lots* of moves that wouldn't be bothered with at all
+		* can we guess a multi-arm bandit prior that isn't uniform? if so, how do we use it?
+		* N.B. don't have to get *really good* priors -- just have to do enough better than uniform that it's worth the cost, which is generally pretty easy
+		* α_0 idea: deep learning... okay, so there was a "dunno, wave your hands and throw ML at it" moment after all. stay tuned for the talk where I explain why deep convolutional neural nets are obviously correct but don't hold your breath
+		* but also has a well-motivated part: the modified UCB formula
+	* summary

@@ -1,0 +1,435 @@
+\documentclass[table]{beamer}
+\usepackage[draft]{beamer_minimal}
+\usepackage{yfonts}
+\usepackage[normalem]{ulem}
+\usepackage{tikz}
+
+% https://tex.stackexchange.com/questions/89588/positioning-relative-to-page-in-tikz
+\makeatletter
+\def\parsecomma#1,#2\endparsecomma{\def\page@x{#1}\def\page@y{#2}}
+\tikzdeclarecoordinatesystem{page}{
+    \parsecomma#1\endparsecomma
+    \pgfpointanchor{current page}{north east}
+    % Save the upper right corner
+    \pgf@xc=\pgf@x%
+    \pgf@yc=\pgf@y%
+    % save the lower left corner
+    \pgfpointanchor{current page}{south west}
+    \pgf@xb=\pgf@x%
+    \pgf@yb=\pgf@y%
+    % Transform to the correct placement
+    \pgfmathparse{(\pgf@xc-\pgf@xb)/2.*\page@x+(\pgf@xc+\pgf@xb)/2.}
+    \expandafter\pgf@x\expandafter=\pgfmathresult pt
+    \pgfmathparse{(\pgf@yc-\pgf@yb)/2.*\page@y+(\pgf@yc+\pgf@yb)/2.}
+    \expandafter\pgf@y\expandafter=\pgfmathresult pt
+}
+\makeatother
+
+\colorlet{alertgreen}{green!55!black}
+\colorlet{alertred}{red!70!black}
+\setbeamercolor{alerted text}{fg=alertgreen}
+\newcommand\img[2]{\includegraphics[width=#1\textwidth]{images/#2}}
+
+\title{Win any game with these 3 weird tricks.}
+\subtitle{Number three will shock you\\[2em]\img{0.5}{number-three-will-shock-you.jpg}}
+\author{Daniel Wagner} % for hyperref
+\date{September 27, 2019}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+	\frametitle{What's the plan, Stan?}
+	\begin{itemize}
+		\setlength\itemsep{5ex}
+		\item \alert{Intro to minimax}
+		\item What if minimax didn't suck?
+		\item How to \sout{win} lose slowly in Vegas
+		\item What if our priors didn't suck?
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Show of hands}
+	\begin{center}
+		\img{0.7}{hands-up.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Games, generally}
+	\begin{center}
+		\img{1}{games-1.jpg}
+	\end{center}
+	% for alignment with next slide
+	\begin{tikzpicture}
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Games, generally}
+	\begin{center}
+		\img{1}{games-1.jpg}
+	\end{center}
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[draw,circle,alertgreen] at (page cs:-0.21,0.525) (node) {\phantom{blargle}};
+		\node[alertgreen] at (page cs:0.2,0.7) (question) {Which move?};
+		\path[draw,alertgreen,->] (question) -> (node);
+	\end{tikzpicture}%
+\end{frame}
+
+\begin{frame}
+	\frametitle{\begin{tabular}{m{7em}m{0.21\linewidth}}Intro to minimax&\img{0.2}{mini-max.png}\end{tabular}}
+	\begin{itemize}
+		\item Platonic ideal
+		\item Ur-search
+		\item Mathematician's first love
+			\pause
+			\begin{center}
+				\img{0.15}{superman.jpg}
+			\end{center}
+			\pause
+		\item Simple, elegant, obviously correct\pause\ldots\ and
+			{\color{alertred}utterly useless}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{How to minimax}
+	\begin{enumerate}
+		\item Start at the leaves, and work towards the root.
+		\item Each player picks the move that's best for them.
+		\item ????
+		\item Profit.
+	\end{enumerate}
+
+	\\[5ex]
+
+	Outcome: a game tree where each node is labeled by the \alert{best
+	worst-case} utility that each player can guarantee for themselves.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Minimax illustrated}
+	\begin{center}
+		\img{1}{games-1.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Minimax illustrated}
+	\begin{center}
+		\img{1}{games-2.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Minimax illustrated}
+	\begin{center}
+		\img{1}{games-3.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Minimax illustrated}
+	\begin{center}
+		\img{1}{games-4.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Minimax illustrated}
+	\begin{center}
+		\img{1}{games-5.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Minimax illustrated}
+	\begin{center}
+		\img{1}{games-6.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Minimax illustrated}
+	\begin{center}
+		\img{1}{games-7.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{What's the plan, Stan?}
+	\begin{itemize}
+		\setlength\itemsep{5ex}
+		\item Intro to minimax
+		\item \alert{What if minimax didn't suck?}
+		\item How to \sout{win} lose slowly in Vegas
+		\item What if our priors didn't suck?
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Why does it suck?}
+	\begin{enumerate}
+		\item Code up your minimax algorithm.
+		\item Teach it the rules of chess.
+		\item Set it off running.
+	\end{enumerate}
+
+	\begin{center}
+		\img{0.4}{hourglass.jpg}
+	\end{center}
+
+	You slowly realize that the game tree has $>2^{64}$ leaves\ldots
+\end{frame}
+
+\begin{frame}
+	\frametitle{Solution}
+	\begin{enumerate}
+		\item Only descend into the tree a little bit\\(not all the way to
+			leaves).
+		\item However deep we made it, \emph{guess}\footnotemark{} minimax's valuation.
+		\item Minimax our way back to the root.
+	\end{enumerate}
+	\footnotetext{Completely computationally intractable.}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Weird Trick \#1: Rollouts}
+	\alert{Sample} from a node's leaves to guess it's valuation.
+
+	\\[8ex]
+
+	(Typically: repeatedly choose random moves until the game ends.)
+\end{frame}
+
+\begin{frame}
+	\frametitle{What's the plan, Stan?}
+	\begin{itemize}
+		\setlength\itemsep{5ex}
+		\item Intro to minimax
+		\item What if minimax didn't suck?
+		\item \alert{How to \sout{win} lose slowly in Vegas}
+		\item What if our priors didn't suck?
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{How to \sout{win} lose slowly in Vegas}
+	\begin{center}
+		\img{0.4}{slot-machine-choice-1.png}\hfil\img{0.4}{slot-machine-choice-2.png}
+
+		\\[5ex]
+
+		There's a lot of slot machines.
+
+		Are they all equally terrible?
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{How to lose quickly}
+	\begin{itemize}
+		\item Sit down at a slot machine and play it nonstop.
+			\begin{itemize}
+				\item Maybe you picked the worst one.
+				\item Probably you picked a merely mediocre one.
+				\item You will only ever learn how terrible the one slot
+					machine is.
+			\end{itemize}
+		\item Play the slot machines round-robin.
+			\begin{itemize}
+				\item Good risk management: only $1/n$ of your resources
+					spent on worst machine.
+				\item You get about equal confidence judgments of each
+					machine.
+				\item \ldots{}but you never take advantage of that
+					knowledge.
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Formal problem statement}
+	\begin{itemize}
+		\item You have a collection $D_1,\ldots,D_n$ of unknown distributions with
+			support $[0,1]$.
+		\item You repeatedly pick one of the distributions and sample from
+			it, giving you a collection of samples $s_1,\ldots,s_m$.
+		\item One of the distributions, say, distribution $D_t$, has the
+			highest mean $\mu_t$.
+		\item Your \alert{regret} is the expected difference
+			\[m\mu_t - \sum_{i=1}^m s_i\]
+			between the best expected payout and your payout.
+	\end{itemize}
+
+	What algorithm minimizes regret?
+\end{frame}
+
+\begin{frame}
+	\frametitle{UCB1}
+	Keep statistics $\bar p$ and $\bar c$ for each distribution:
+	\begin{itemize}
+		\item $p_1,\ldots,p_n$ is the \alert{payout} from each distribution (the sum
+			of the samples)
+		\item $c_1,\ldots,c_n$ is the \alert{count} of how many times you
+			selected each distribution
+	\end{itemize}
+	Set $c=\sum_{j=1}^n c_j$. Select the distribution $D_i$ that maximizes:
+	\[\frac{p_i}{c_i} + \sqrt{\frac{2\ln(c)}{c_i}}\]
+
+	\pause
+
+	\begin{center}
+		\img{0.4}{confused.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Miscellanea about UCB1}
+
+	\begin{itemize}
+		\item Second term is a one-sided confidence interval.
+		\item Chooses the best distribution exponentially more often than
+			any other in the long run.
+		\item $O(\ln(m))$ regret after $m$ selections.
+		\item Asymptotically optimal regret.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Weird Trick \#2: UCT1}
+	I have time to search another node in the game tree.
+
+	Which one should I search?
+
+	\\[3ex]
+
+	\begin{enumerate}
+		\item Start at the root.
+		\item \alert{Use UCB1 to decide which child to descend to.}
+		\item Repeat until we find a node we haven't searched yet.
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\frametitle{What's the plan, Stan?}
+	\begin{itemize}
+		\setlength\itemsep{5ex}
+		\item Intro to minimax
+		\item What if minimax didn't suck?
+		\item How to \sout{win} lose slowly in Vegas
+		\item \alert{What if our priors didn't suck?}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Obvious positions}
+	\begin{center}
+		\only<+>{\img{0.4}{go-position-1.png}}
+		\only<+>{\img{0.4}{go-position-2.png}}
+
+		\\[3ex]
+
+		\onslide<.>
+		\img{0.2}{satisfied.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Obvious moves}
+	\begin{center}
+		\only<+>{\img{0.4}{go-moves-1.png}}
+		\only<+->{\img{0.4}{go-moves-2.png}}
+
+		\\[3ex]
+
+		\onslide<.> 26 legal moves
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Meanwhile, in MCTS land\ldots}
+	\begin{itemize}
+		\item Start with very low-quality evaluation
+		\item Rollouts select moves uniformly
+		\item So any single rollout gives very low-quality information
+		\item Convergence is very slow!
+	\end{itemize}
+
+	\\[5ex]
+
+	What if we spent a bit more time and did slightly better?
+\end{frame}
+
+\begin{frame}
+	\frametitle{Weird Trick \#3: Deep Learning}
+	Use a \alert{\textgoth{Deep Convolutional Neural Net}}\footnotemark{} for
+	
+	\\[1.5ex]
+
+	\begin{itemize}
+		\setlength\itemsep{1.5ex}
+		\item initial evaluation estimates, and
+		\item more informative rollouts.
+	\end{itemize}
+
+	\\[1.5ex]
+
+	Train it on games played by pure MCTS.
+
+	\footnotetext{Okay, so there was a ``dunno, wave your hands and throw ML
+	at it'' moment after all.}
+\end{frame}
+
+\begin{frame}
+	\frametitle{What's the plan, Stan?}
+	\begin{itemize}
+		\setlength\itemsep{5ex}
+		\item Intro to minimax
+		\item What if minimax didn't suck?
+		\item How to \sout{win} lose slowly in Vegas
+		\item What if our priors didn't suck?
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{THE END}
+	\begin{center}
+		\img{0.8}{questions.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Objections}
+	\begin{center}
+		\img{0.35}{trap-card.jpg}
+	\end{center}
+
+	\begin{itemize}
+		\item You baited me with ``maximize worst-case'', but switched to
+			``maximize expected case''.
+			\begin{itemize}
+				\item Turns out to be the same, in the limit!
+
+					\ldots{}but nobody cares, because the limit is really
+					far away.
+				\item Better priors help.
+			\end{itemize}
+		\item UCB1 works when the set of distributions is fixed. But we keep
+			adding distributions as we search.
+			\begin{itemize}
+				\item True. A separate proof shows it works anyway.
+			\end{itemize}
+		\item If all we have is a tree, what the heck are we convolving?
+			\begin{itemize}
+				\item That part is specific to games that have a board and
+					pieces. (That's most games humans play.)
+			\end{itemize}
+	\end{itemize}
+	\addtocounter{framenumber}{-1}
+\end{frame}
+
+\end{document}
