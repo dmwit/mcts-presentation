@@ -34,7 +34,7 @@
 \title{Win any game with these 3 weird tricks.}
 \subtitle{Number three will shock you\\[2em]\img{0.5}{number-three-will-shock-you.jpg}}
 \author{Daniel Wagner} % for hyperref
-\date{September 27, 2019}
+\date{October 24, 2019}
 
 \begin{document}
 
@@ -81,7 +81,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{\begin{tabular}{m{7em}m{0.21\linewidth}}Intro to minimax&\img{0.2}{mini-max.png}\end{tabular}}
+	\frametitle{Intro to minimax}
 	\begin{itemize}
 		\item Platonic ideal
 		\item Ur-search
@@ -426,7 +426,7 @@
 \begin{frame}
 	\frametitle{Objections}
 	\begin{center}
-		\img{0.35}{trap-card.jpg}
+		\img{0.25}{trap-card.jpg}
 	\end{center}
 
 	\begin{itemize}
@@ -448,6 +448,12 @@
 			\begin{itemize}
 				\item That part is specific to games that have a board and
 					pieces. (That's most games humans play.)
+			\end{itemize}
+		\item Why not spend CPU time on rollouts instead of training?
+			\begin{itemize}
+				\item 10x rollout time is one move deeper.
+				\item Half the branching factor, multiplicative factor
+					deeper instead.
 			\end{itemize}
 	\end{itemize}
 	\addtocounter{framenumber}{-1}
